@@ -47,11 +47,19 @@ Feel free to make suggestions or contribute to the project.
 
 Clone this repository to your Raspberry Pi.
 
-Edit the "Configuration" section in `install.sh`, then execute it as a user (without sudo):
+Edit the values of `DONGLE_IMEI` and `WHITELISTED_PHONE_NUMBER` in the "Configuration" section in `install.sh`, then execute it as a user (without sudo):
 
 ```
 ./install.sh
 ```
+
+You can open the Asterisk terminal with:
+
+```
+sudo asterisk -rvvvvv
+```
+
+The `vvvvv` bit is makes the output more verbose, so you should be able to see when your call is received, picked up and routed to a correct context and extension.
 
 Your call recordings will be available at: 
 
@@ -59,9 +67,11 @@ Your call recordings will be available at:
 /var/spool/asterisk/monitor/
 ```
 
-When you play a recording, you may notice a very sharp sound at the very beginning. I haven't looked into removing it yet, although feel free to submit a pull request with a fix.
+You can copy the recordings from the computer by running an `scp` command, using a shared folder or putting some automation in place. 
 
-## Credits
+When you play a recording, you may notice a very sharp sound at the very beginning. I haven't looked into removing it yet and most likely won't, although feel free to submit a pull request with a fix.
+
+## Thanks to
 * Asterisk community with [its amazing project](https://github.com/asterisk/asterisk)
 * bg111 for creating [chan_dongle](https://github.com/bg111/asterisk-chan-dongle) and Walter Doekes for maintaining [its up-to-date fork](https://github.com/wdoekes/asterisk-chan-dongle)
 
