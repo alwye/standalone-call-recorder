@@ -87,26 +87,20 @@ make || validate_failure
 sudo make install || validate_failure
 cd .. || validate_failure
 
-
 # Copy the chan_dongle config file to asterisk's config folder
 sudo cp templates/dongle.conf /etc/asterisk/ || validate_failure
 # Replace the template with your real IMEI
 sudo sed -i "s/<imei>/${DONGLE_IMEI}/g" /etc/asterisk/dongle.conf || validate_failure
 
-# Copy the dialplan (set of instruction your program must follow when a call comes in)
-sudo cp templates/recorder_dialplan.conf /etc/asterisk/
-# Replace the template with the whitelisted number
-sudo sed -i "s/<whitelisted_number>/${WHITELISTED_PHONE_NUMBER}/g" /etc/asterisk/recorder_dialplan.conf || validate_failure
 # Now, include the dialplan from the asterisk's extensions config
-echo '#include recorder_dialplan.conf' | sudo tee -a /etc/asterisk/extensions.conf > /dev/null || validate_failure
+sudo cat templates/recorder_dialplan.conf | sudo tee -a /etc/asterisk/extensions.conf > /dev/null || validate_failure
+# Replace the template with the whitelisted number
+sudo sed -i "s/<whitelisted_number>/${WHITELISTED_PHONE_NUMBER}/g" /etc/asterisk/extensions.conf || validate_failure
 
 # Restart Asterisk
 echo "Restarting Asterisk..."
 sudo asterisk -rx "core restart gracefully" || validate_failure
 # Wait for 10 seconds TODO: too lazy to check the status, 10 sec should be enough
 sleep 10
-# Load the dongle module
-echo "Trying to load the chan_dongle module"
-sudo asterisk -rx "module load chan_dongle.so" || validate_failure
 
-echo "We're done, congrats. I'd recommend to restart your machine."
+echo "We're done, congrats."
