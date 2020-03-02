@@ -59,7 +59,7 @@ You can open the Asterisk terminal with:
 sudo asterisk -rvvvvv
 ```
 
-The `vvvvv` bit is makes the output more verbose, so you should be able to see when your call is received, picked up and routed to a correct context and extension.
+The `vvvvv` bit makes the output more verbose, so you should be able to see when your call is received, picked up and routed to a correct context and extension.
 
 Your call recordings will be available at: 
 
