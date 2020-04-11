@@ -71,6 +71,41 @@ You can copy the recordings from the computer by running an `scp` command, using
 
 When you play a recording, you may notice a very sharp sound at the very beginning. I haven't looked into removing it yet and most likely won't, although feel free to submit a pull request with a fix.
 
+## Making a recorded call
+
+You will need to make a 3-way conference call.
+
+Different phones do it differently. Below is the description for iOS:
+
+1. Open your contacts or phone app and make a call to your recording line.
+
+2. When asterisk picks up, tap "Add Call". This will bring up the contact list.
+
+3. Select a contact or enter a phone number. During that call the asterisk line will be put on hold.
+
+4. Once connected with the other party, click "Merge" to create a three-way conference call.
+
+5. Once successfully merged you should be able to hear the other party, and asterisk will record both parties.
+
+6. Make sure to let the other party know you're recording the call.
+
+7. When you hang up, asterisk will stop the recording and save it in a folder of your preference.
+
+## FAQ
+
+Q: Can other people abuse my line?
+
+A: If you properly set up the white list, only your calls will be picked up.
+
+Q: Can I have multiple whitelisted numbers?
+
+A: Yes, you may add something like ```exten => _+X.,1,GotoIf($[${CALLERID(num)} = 00000000000 | ${CALLERID(num)} = 00000000000]?allow:reject)``` to whitelist two numbers (in `/etc/asterisk/externsions.conf`). Following the same principle, you can add even more numbers. You will need to restart asterisk by running ```sudo asterisk -x "core restart gracefully"```
+
+Q: Can I use a different directory to store my recordings?
+
+A: Yes. Find the line ```same  => n, MixMonitor(${CALLERID(num)}-${STRFTIME(${EPOCH},,%d-%m-%Y-%H-%M-%S)}-${UNIQUEID}.wav)``` in `/etc/asterisk/extensions.conf`. The argument in `MixMonitor` is a file name. If you prefix that with an absolute path to the folder you want to store your recordings in, just add that before the file name. For example: `/var/recordings/${CALLERID(num)}-${STRFTIME(${EPOCH},,%d-%m-%Y-%H-%M-%S)}-${UNIQUEID}.wav`. Make sure asterisk has rights to write into that folder.
+
+
 ## Thanks to
 * Asterisk community with [its amazing project](https://github.com/asterisk/asterisk)
 * bg111 for creating [chan_dongle](https://github.com/bg111/asterisk-chan-dongle) and Walter Doekes for maintaining [its up-to-date fork](https://github.com/wdoekes/asterisk-chan-dongle)
